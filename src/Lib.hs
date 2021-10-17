@@ -8,6 +8,7 @@ import qualified Data.ByteString.Internal as BS (c2w, w2c)
 import qualified Data.ByteString.Lazy as B
 import Data.Fixed
 import Data.Int
+import Data.Tuple.Extra
 
 -- format = BigEndian
 
@@ -17,9 +18,51 @@ low = encode $(minBound :: Int16) :: B.ByteString
 
 high = encode $(maxBound :: Int16) :: B.ByteString
 
+alleMeineEntchen = [(C, 3, 300),
+                    (D, 3, 300),
+                    (E, 3, 300),
+                    (F, 3, 300),
+                    (G, 3, 600),
+                    (G, 3, 600),
+
+                    (A, 3, 300),
+                    (A, 3, 300),
+                    (A, 3, 300),
+                    (A, 3, 300),
+                    (G, 3, 1200),
+
+                    (A, 3, 300),
+                    (A, 3, 300),
+                    (A, 3, 300),
+                    (A, 3, 300),
+                    (G, 3, 1200),
+
+                    (F, 3, 300),
+                    (F, 3, 300),
+                    (F, 3, 300),
+                    (F, 3, 300),
+                    (E, 3, 600),
+                    (E, 3, 600),
+
+                    (G, 3, 300),
+                    (G, 3, 300),
+                    (G, 3, 300),
+                    (G, 3, 300),
+
+                    (C, 3, 1200)]
+
 someFunc :: IO ()
 someFunc = do
-  B.putStr $ funcToByteString $ genWave (freqOfNthNote C 3) sinF
+  B.putStr $ funcToByteString $ foldr1 (++) $ (++) (pause 20) <$> ( uncurry3 playNote <$> alleMeineEntchen)
+
+playNote :: Note -> Int -> Int -> [Double]
+playNote note octave ms = take (msToSamples ms) $ genWave (freqOfNthNote note octave) squareF
+
+msToSamples :: Int -> Int
+msToSamples ms = round (fromIntegral ms/1000 * rate)
+
+pause :: Int -> [Double]
+pause ms = replicate (msToSamples ms) 0
 
 data Note = C | CUp | D | DUp | E | F | FUp | G | GUp | A | AUp | B deriving (Enum)
 

@@ -2,8 +2,8 @@
 
 Windows:
 
-``stack run | ffmpeg.exe -f u8 -i pipe:0 -f wav pipe:1 | vlc -``
+``stack run | ffmpeg.exe -f s16be -i pipe:0 -f wav pipe:1 | vlc -``
 
 Linux:
 
-``stack run | aplay ``
+``stack run | aplay -f S16_BE -r 8000``
