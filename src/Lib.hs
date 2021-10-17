@@ -16,6 +16,7 @@ sec1empty = B.concat $ replicate 8000 (encode (0::Int)) :: B.ByteString
 
 someFunc :: IO ()
 someFunc = do
-  B.putStr $ B.concat $ repeat $ foldr1 B.append [tone1992,tone1992, tone1336,tone1336,tone1336,tone1336, tone1336]
+  B.putStr $ B.concat $ repeat $ B.concat [tone1992, tone1336]
 
+-- $ B.concat $ repeat $ foldr1 B.append [tone1992,tone1992, tone1336,tone1336,tone1336,tone1336, tone1336]
 --  concat $  repeat (replicate 10 low ++ replicate 10 high)
